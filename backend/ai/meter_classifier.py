@@ -1,27 +1,35 @@
-from ultralytics import YOLO
+import cv2
 import os
-
-# Current folder (backend/ai)
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# Path to trained model
-MODEL_PATH = os.path.join(BASE_DIR, "models", "best.pt")
-
-# Load YOLO model
-model = YOLO(MODEL_PATH)
 
 
 def is_meter_image(image_path):
+    """
+    Basic image validation.
 
-    results = model.predict(
-        source=image_path,
-        conf=0.10,      # Lower confidence threshold
-        imgsz=640,
-        verbose=False
-    )
+    YOLO detection is handled separately in meter_detection.py.
+    This function does NOT load YOLO, which saves RAM.
+    """
 
-    for result in results:
-        if len(result.boxes) > 0:
-            return True
+    print("Checking uploaded image...")
 
-    return False
+    if not os.path.exists(image_path):
+        print("Image does not exist:", image_path)
+        return False
+
+    image = cv2.imread(image_path)
+
+    if image is None:
+        print("Unable to read image.")
+        return False
+
+    # Make sure the image has reasonable dimensions
+    height, width = image.shape[:2]
+
+    print("Image size:", width, "x", height)
+
+    if width < 50 or height < 50:
+        print("Image is too small.")
+        return False
+
+    print("Image validation successful.")
+    return True
