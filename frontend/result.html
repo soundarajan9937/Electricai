@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Analysis Result</title>
+
+    <link rel="stylesheet" href="css/result.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>⚡ AI Electricity Bill Analysis</h1>
+
+    <div class="result-card">
+
+        <div class="left">
+
+            <h2>Uploaded Meter</h2>
+
+            <img id="meterImage" src="" alt="Meter Image">
+
+        </div>
+
+        <div class="right">
+
+            <table>
+
+                <tr>
+                    <td>Current Reading</td>
+                    <td><strong id="reading">Loading...</strong></td>
+                </tr>
+
+                <tr>
+                    <td>Estimated Bill</td>
+                    <td><strong id="bill">Loading...</strong></td>
+                </tr>
+
+                <tr>
+                    <td>Status</td>
+                    <td>
+                        <span class="success">✔ Verified</span>
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <div class="tips">
+
+        <h2>🤖 AI Energy Saving Tips</h2>
+
+        <ul>
+
+            <li>Turn off unused electrical appliances.</li>
+
+            <li>Use LED bulbs instead of CFL bulbs.</li>
+
+            <li>Switch off the main power when not in use.</li>
+
+            <li>Use 5-star rated appliances.</li>
+
+            <li>Monitor your electricity usage monthly.</li>
+
+        </ul>
+
+    </div>
+
+    <div class="buttons">
+
+        <a href="dashboard.html">
+            ⬅ Dashboard
+        </a>
+
+        <button type="button" onclick="saveHistory()">
+            📜 Save to History
+        </button>
+
+        <button type="button" onclick="downloadReport()">
+            📄 Download Report
+        </button>
+
+    </div>
+
+</div>
+
+<script src="js/result.js"></script>
+
+</body>
+
+</html>

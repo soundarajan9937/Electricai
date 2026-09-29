@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register | AI Electricity Bill Analyzer</title>
+
+    <link rel="stylesheet" href="css/register.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="left">
+
+        <img src="images/logo.png" class="logo">
+
+        <h1>Create Your Account</h1>
+
+        <p>
+            Join AI Electricity Bill Analyzer and verify your
+            electricity bills using Artificial Intelligence.
+        </p>
+
+        <img src="images/ai.png" class="ai">
+
+    </div>
+
+    <div class="right">
+
+        <div class="register-box">
+
+            <h2>Register</h2>
+
+            <form id="registerForm">
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Full Name"
+                    required
+                >
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Email Address"
+                    required
+                >
+
+                <input
+                    type="text"
+                    id="phone"
+                    placeholder="Phone Number"
+                    required
+                >
+
+                <input
+                    type="text"
+                    id="meter"
+                    placeholder="Meter Number"
+                    required
+                >
+
+                <textarea
+                    id="address"
+                    placeholder="Address"
+                    required
+                ></textarea>
+
+                <div class="password-wrapper" style="position: relative; width: 100%;">
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Password"
+                        style="width: 100%; padding-right: 45px; margin-bottom: 15px;"
+                        required
+                    >
+                    <i class="fa-solid fa-eye" id="togglePassIcon" onclick="toggleFieldVisibility('password', 'togglePassIcon')" style="position: absolute; right: 15px; top: 22px; cursor: pointer; color: #003366; font-size: 18px;"></i>
+                </div>
+
+                <div class="password-wrapper" style="position: relative; width: 100%;">
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Confirm Password"
+                        style="width: 100%; padding-right: 45px; margin-bottom: 15px;"
+                        required
+                    >
+                    <i class="fa-solid fa-eye" id="toggleConfirmPassIcon" onclick="toggleFieldVisibility('confirmPassword', 'toggleConfirmPassIcon')" style="position: absolute; right: 15px; top: 22px; cursor: pointer; color: #003366; font-size: 18px;"></i>
+                </div>
+
+                <button type="submit">
+                    Create Account
+                </button>
+
+            </form>
+
+            <p class="login-link">
+
+                Already have an account?
+
+                <a href="login.html">
+                    Login
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="js/register.js"></script>
+
+</body>
+
+</html>

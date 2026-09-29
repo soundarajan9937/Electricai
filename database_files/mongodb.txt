@@ -1,0 +1,43 @@
+==================================================
+           MONGODB ATLAS CONFIGURATION GUIDE
+==================================================
+
+1. MongoDB Atlas Overview
+-------------------------
+The application now uses MongoDB Atlas (Cloud Database) instead of a local MongoDB instance.
+
+2. Connection String Format
+---------------------------
+MongoDB Atlas uses the SRV URI format:
+
+  mongodb+srv://<username>:<password>@<cluster-url>/<dbname>?retryWrites=true&w=majority
+
+Where:
+  - <username>    : Database user created in MongoDB Atlas (Database Access tab)
+  - <password>    : Password for the database user
+  - <cluster-url> : Cluster hostname (e.g. cluster0.abcde.mongodb.net)
+  - <dbname>      : Target database name (default: electric_ai)
+
+3. Environment Setup (.env)
+---------------------------
+Configuration is loaded from `backend/.env`.
+Edit `backend/.env` with your MongoDB Atlas details:
+
+  MONGO_URI=mongodb+srv://your_user:your_password@cluster0.abcde.mongodb.net/electric_ai?retryWrites=true&w=majority
+  DATABASE_NAME=electric_ai
+  SECRET_KEY=electric_ai_project
+
+4. Network Access (IP Whitelist)
+--------------------------------
+In your MongoDB Atlas Dashboard:
+  1. Go to "Network Access" under Security.
+  2. Click "Add IP Address".
+  3. Add your current IP address or "0.0.0.0/0" (Allow Access from Anywhere for development).
+
+5. Collections
+--------------
+  - users    : Stores registered user details (name, email, phone, meter, address, password)
+  - bills    : Stores calculated bill details and extracted OCR units
+  - payments : Stores payment records
+  - history  : Stores usage/bill history
+  - profiles : Stores user profile updates

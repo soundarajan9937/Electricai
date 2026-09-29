@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Payment History</title>
+
+<link rel="stylesheet" href="css/payment.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>💳 Payment History</h1>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Date</th>
+                <th>Transaction ID</th>
+                <th>Amount</th>
+                <th>Payment Method</th>
+                <th>Status</th>
+                <th>Receipt</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr>
+
+                <td>01-Jul-2026</td>
+                <td>TXN100245</td>
+                <td>₹1094</td>
+                <td>Google Pay</td>
+                <td class="success">Success</td>
+
+                <td>
+
+                    <button onclick="downloadReceipt()">
+
+                        Download
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>01-Jun-2026</td>
+                <td>TXN100102</td>
+                <td>₹1015</td>
+                <td>Debit Card</td>
+                <td class="success">Success</td>
+
+                <td>
+
+                    <button onclick="downloadReceipt()">
+
+                        Download
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>01-May-2026</td>
+                <td>TXN100015</td>
+                <td>₹980</td>
+                <td>PhonePe</td>
+                <td class="success">Success</td>
+
+                <td>
+
+                    <button onclick="downloadReceipt()">
+
+                        Download
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+    <div class="buttons">
+
+        <a href="dashboard.html">
+
+            🏠 Dashboard
+
+        </a>
+
+        <a href="history.html">
+
+            📜 Bill History
+
+        </a>
+
+    </div>
+
+</div>
+
+<script src="js/payment.js"></script>
+
+</body>
+
+</html>

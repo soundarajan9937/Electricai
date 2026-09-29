@@ -1,0 +1,99 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#eef4fb;
+padding:40px;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+}
+
+h1{
+text-align:center;
+margin-bottom:30px;
+color:#003366;
+}
+
+.result-card{
+display:flex;
+gap:40px;
+background:white;
+padding:30px;
+border-radius:12px;
+box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+.left{
+flex:1;
+text-align:center;
+}
+
+.left img{
+width:300px;
+margin-top:20px;
+}
+
+.right{
+flex:2;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+td{
+padding:18px;
+border-bottom:1px solid #ddd;
+font-size:18px;
+}
+
+.success{
+color:green;
+font-weight:bold;
+}
+
+.tips{
+margin-top:40px;
+background:white;
+padding:25px;
+border-radius:10px;
+box-shadow:0 5px 10px rgba(0,0,0,.1);
+}
+
+.tips ul{
+margin-top:20px;
+padding-left:20px;
+line-height:35px;
+}
+
+.buttons{
+margin-top:35px;
+display:flex;
+justify-content:center;
+gap:20px;
+}
+
+.buttons a,
+.buttons button{
+padding:15px 25px;
+background:#0d6efd;
+color:white;
+text-decoration:none;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:17px;
+}
+
+.buttons a:hover,
+.buttons button:hover{
+background:#084298;
+}

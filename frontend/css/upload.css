@@ -1,0 +1,180 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+/* Background Image */
+body{
+
+    background-image:url("../images/background.png");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    min-height:100vh;
+
+    padding:30px;
+}
+
+/* Main Container */
+
+.container{
+
+    width:100%;
+    display:flex;
+    justify-content:center;
+
+}
+
+/* Upload Card */
+
+.upload-box{
+
+    width:700px;
+
+    background:rgba(255,255,255,0.92);
+
+    backdrop-filter:blur(8px);
+
+    padding:40px;
+
+    border-radius:20px;
+
+    text-align:center;
+
+    box-shadow:0 15px 35px rgba(0,0,0,.35);
+
+}
+
+/* Logo */
+
+.logo{
+
+    width:80px;
+
+    margin-bottom:20px;
+
+}
+
+/* Heading */
+
+h1{
+
+    margin-bottom:15px;
+
+    color:#003366;
+
+    font-size:38px;
+
+}
+
+p{
+
+    margin-bottom:30px;
+
+    color:#555;
+
+    line-height:28px;
+
+    font-size:18px;
+
+}
+
+/* Upload Image */
+
+.preview{
+
+    margin-bottom:30px;
+
+}
+
+.preview img{
+
+    width:300px;
+
+    height:230px;
+
+    object-fit:contain;
+
+    background:white;
+
+    border-radius:15px;
+
+    padding:15px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.2);
+
+}
+
+/* File Input */
+
+input{
+
+    margin-bottom:30px;
+
+    font-size:16px;
+
+}
+
+/* Button */
+
+button{
+
+    background:#0d6efd;
+
+    color:white;
+
+    border:none;
+
+    padding:15px 40px;
+
+    font-size:18px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+button:hover{
+
+    background:#084298;
+
+    transform:translateY(-2px);
+
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+.upload-box{
+
+    width:95%;
+    padding:25px;
+
+}
+
+.preview img{
+
+    width:220px;
+    height:auto;
+
+}
+
+h1{
+
+    font-size:30px;
+
+}
+
+}

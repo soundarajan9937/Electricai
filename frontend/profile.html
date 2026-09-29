@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile</title>
+
+    <link rel="stylesheet" href="css/profile.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="profile-card">
+
+        <img src="images/user.png" alt="Profile Image" class="profile-img">
+
+        <h1>My Profile</h1>
+
+        <form id="profileForm">
+
+            <!-- Full Name -->
+            <label for="name">Full Name</label>
+            <input
+                type="text"
+                id="name"
+                placeholder="Enter Full Name"
+                required
+            >
+
+            <!-- Email -->
+            <label for="email">Email</label>
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter Email"
+                required
+            >
+
+            <!-- Phone -->
+            <label for="phone">Phone Number</label>
+            <input
+                type="tel"
+                id="phone"
+                placeholder="Enter Phone Number"
+                required
+            >
+
+            <!-- Meter Number -->
+            <label for="meter">Meter Number</label>
+            <input
+                type="text"
+                id="meter"
+                placeholder="Enter Meter Number"
+                required
+            >
+
+            <!-- Address -->
+            <label for="address">Address</label>
+            <textarea
+                id="address"
+                rows="4"
+                placeholder="Enter your address"
+                required
+            ></textarea>
+
+            <button type="button" onclick="saveProfile()">
+                Save Profile
+            </button>
+
+        </form>
+
+        <br>
+
+        <a href="dashboard.html" class="back">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+</div>
+
+<script src="js/profile.js"></script>
+
+</body>
+</html>

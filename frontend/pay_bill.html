@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pay Electricity Bill</title>
+
+    <link rel="stylesheet" href="css/payment.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="payment-card">
+
+        <img src="images/logo.png" class="logo" alt="Logo">
+
+        <h1>Electricity Bill Payment</h1>
+
+        <h2>Total Amount</h2>
+
+        <h3 id="billAmount">₹0</h3>
+
+        <hr>
+
+        <h2>Select Payment Method</h2>
+
+        <div class="methods">
+
+            <label>
+                <input type="radio" name="payment" value="Card" checked>
+                💳 Credit / Debit Card
+            </label>
+
+            <label>
+                <input type="radio" name="payment" value="Google Pay">
+                📱 Google Pay
+            </label>
+
+            <label>
+                <input type="radio" name="payment" value="PhonePe">
+                📲 PhonePe
+            </label>
+
+            <label>
+                <input type="radio" name="payment" value="Paytm">
+                🟣 Paytm
+            </label>
+
+            <label>
+                <input type="radio" name="payment" value="Net Banking">
+                🏦 Net Banking
+            </label>
+
+        </div>
+
+        <div class="card-details">
+
+            <input
+                id="cardName"
+                type="text"
+                placeholder="Card Holder Name">
+
+            <input
+                id="cardNumber"
+                type="text"
+                maxlength="16"
+                placeholder="Card Number">
+
+            <div class="row">
+
+                <input
+                    id="expiry"
+                    type="text"
+                    maxlength="5"
+                    placeholder="MM/YY">
+
+                <input
+                    id="cvv"
+                    type="password"
+                    maxlength="3"
+                    placeholder="CVV">
+
+            </div>
+
+        </div>
+
+        <button id="payBtn" onclick="payNow()">
+            Pay ₹0
+        </button>
+
+        <br><br>
+
+        <button onclick="downloadReceipt()">
+            📄 Download Receipt
+        </button>
+
+        <br><br>
+
+        <a href="dashboard.html" class="back">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+</div>
+
+<script src="js/payment.js"></script>
+
+</body>
+
+</html>

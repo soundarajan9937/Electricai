@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard</title>
+
+    <link rel="stylesheet" href="css/dashboard.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+
+            <img src="images/logo.png" alt="Electric AI Logo">
+
+            <h2>Electric AI</h2>
+
+        </div>
+
+        <ul>
+
+            <li class="active">
+                <a href="dashboard.html">
+                    <i class="fa-solid fa-house"></i>
+                    <span id="menuDashboard">Dashboard</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="upload_meter.html">
+                    <i class="fa-solid fa-upload"></i>
+                    <span id="menuUpload">Upload Meter</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="history.html">
+                    <i class="fa-solid fa-file"></i>
+                    <span id="menuHistory">Bill History</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="profile.html">
+                    <i class="fa-solid fa-user"></i>
+                    <span id="menuProfile">Profile</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="settings.html">
+                    <i class="fa-solid fa-gear"></i>
+                    <span id="menuSettings">Settings</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="login.html">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span id="menuLogout">Logout</span>
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+
+    <!-- Main -->
+
+    <div class="main">
+
+        <!-- Header -->
+
+        <div class="top">
+
+            <h1 id="dashboardTitle">Dashboard</h1>
+
+            <div class="user">
+
+                <img src="images/user.png" alt="User">
+
+                <span id="welcomeUser">Welcome, User</span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Quick Actions -->
+
+        <div class="quick">
+
+            <h2 id="quickTitle">Quick Actions</h2>
+
+            <div class="buttons">
+
+                <a href="upload_meter.html" id="uploadBtn">
+                    📤 Upload Meter
+                </a>
+
+                <a href="history.html" id="historyBtn">
+                    📜 Bill History
+                </a>
+
+                <a href="profile.html" id="profileBtn">
+                    👤 Profile
+                </a>
+
+                <a href="settings.html" id="settingsBtn">
+                    ⚙ Settings
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- Payment -->
+
+        <div class="payment-links">
+
+            <h2 id="paymentTitle">
+                Quick Payment Apps
+            </h2>
+
+            <button type="button" class="payment-method-btn" onclick="togglePaymentMethods()">
+                💳 Payment Method
+            </button>
+
+            <div class="payment-buttons" id="paymentButtonsGrid" style="display: none; margin-top: 25px;">
+
+                <a href="https://pay.google.com/" target="_blank">
+                    <img src="images/gpay.png" alt="Google Pay">
+                    <span>Google Pay</span>
+                </a>
+
+                <a href="https://www.phonepe.com/" target="_blank">
+                    <img src="images/phonepe.png" alt="PhonePe">
+                    <span>PhonePe</span>
+                </a>
+
+                <a href="https://paytm.com/" target="_blank">
+                    <img src="images/paytm.png" alt="Paytm">
+                    <span>Paytm</span>
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="js/dashboard.js"></script>
+    <script src="js/language.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | AI Electricity Bill Analyzer</title>
+
+    <link rel="stylesheet" href="css/login.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Left Side -->
+
+    <div class="left">
+
+        <img src="images/logo.png" class="logo" alt="Logo">
+
+        <h1 id="loginSiteTitle">
+            AI Electricity Bill Analyzer
+        </h1>
+
+        <p id="loginDescription">
+            Upload your electricity meter image and verify your electricity bill using Artificial Intelligence.
+        </p>
+
+        <img src="images/ai.png" class="ai" alt="AI">
+
+    </div>
+
+    <!-- Right Side -->
+
+    <div class="right">
+
+        <div class="login-box">
+
+            <h2 id="welcomeTitle">
+                Welcome Back
+            </h2>
+
+            <p id="loginText">
+                Please login to continue
+            </p>
+
+            <form>
+
+                <label id="emailLabel">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter Email"
+                >
+
+                <label id="passwordLabel">
+                    Password
+                </label>
+
+                <div class="password-wrapper" style="position: relative; width: 100%;">
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter Password"
+                        style="width: 100%; padding-right: 45px;"
+                    >
+                    <i class="fa-solid fa-eye" id="togglePasswordIcon" onclick="togglePasswordVisibility()" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #003366; font-size: 18px;"></i>
+                </div>
+
+
+
+                <button
+                    type="submit"
+                    id="loginBtn">
+
+                    Login
+
+                </button>
+
+            </form>
+
+            <div class="links" style="justify-content: flex-end;">
+
+                <a
+                    href="register.html"
+                    id="createAccount">
+
+                    Create Account
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="js/login.js"></script>
+<script src="js/language.js"></script>
+
+</body>
+</html>
