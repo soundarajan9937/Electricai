@@ -1,6 +1,11 @@
-from flask import Flask
-from flask_cors import CORS
+import os
 import traceback
+from flask import Flask, send_from_directory, jsonify
+from flask_cors import CORS
+
+# Path setup for frontend static files
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "frontend"))
 
 # Import Routes
 from routes.auth import auth
@@ -10,7 +15,7 @@ from routes.payment import payment
 from routes.history import history
 from routes.profile import profile
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path="")
 
 # Enable CORS
 CORS(app)
@@ -26,10 +31,22 @@ app.register_blueprint(profile)
 
 @app.route("/")
 def home():
-    return {
+    if os.path.exists(os.path.join(FRONTEND_DIR, "index.html")):
+        return send_from_directory(FRONTEND_DIR, "index.html")
+    return jsonify({
         "success": True,
         "message": "AI Electricity Bill Analyzer Backend Running"
-    }
+    })
+
+
+@app.route("/<path:path>")
+def serve_static(path):
+    if os.path.exists(os.path.join(FRONTEND_DIR, path)):
+        return send_from_directory(FRONTEND_DIR, path)
+    return jsonify({
+        "success": False,
+        "message": "Page or resource not found"
+    }), 404
 
 
 # Global Error Handler
@@ -41,16 +58,17 @@ def handle_error(e):
     traceback.print_exc()
     print("=" * 60 + "\n")
 
-    return {
+    return jsonify({
         "success": False,
         "message": str(e)
-    }, 500
+    }), 500
 
 
 # Run Flask
 if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
     app.run(
-        host="127.0.0.1",
-        port=5000,
+        host="0.0.0.0",
+        port=port,
         debug=False
     )

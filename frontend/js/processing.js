@@ -40,7 +40,7 @@ window.onload = async function () {
 
         console.log("Sending request to Flask...");
 
-        const response = await fetch("http://127.0.0.1:5000/upload", {
+        const response = await fetch(`${API_BASE_URL}/upload`, {
             method: "POST",
             body: formData
         });

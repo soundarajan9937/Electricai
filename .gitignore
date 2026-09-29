@@ -1,7 +1,27 @@
-**/.env
-**/.env.*
-!**/.env.example
+# Environment variables (do not commit credentials)
+.env
+backend/.env
+*.env
+!*.env.example
+!backend/.env.example
+
+# Python cache & build
 __pycache__/
 *.py[cod]
+*$py.class
 .venv/
 venv/
+ENV/
+
+# IDE / Editor configuration
+.idea/
+.vscode/
+*.swp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# User uploaded files (keep uploads folder tracked)
+backend/uploads/*
+!backend/uploads/.gitkeep
