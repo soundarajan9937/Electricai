@@ -1,53 +1,68 @@
 print("NEW OCR.PY LOADED")
 
+import os
 import easyocr
 import cv2
 import re
 import gc
 
 
-# ============================================================
-# EASY OCR READER
-# ============================================================
-
 reader = None
 
 
+# ---------------------------------------------------------
+# EASY OCR MODEL DIRECTORY
+# ---------------------------------------------------------
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+MODEL_DIR = os.path.join(
+    BASE_DIR,
+    "ai",
+    "easyocr_models"
+)
+
+
+# ---------------------------------------------------------
+# LOAD OCR
+# ---------------------------------------------------------
+
 def load_reader():
-    """
-    Load EasyOCR only when OCR is required.
-    """
 
     global reader
 
     if reader is None:
 
         print("=" * 60)
-        print("Loading EasyOCR...")
+        print("Loading EasyOCR from local models...")
+        print("Model directory:", MODEL_DIR)
         print("=" * 60)
 
         reader = easyocr.Reader(
             ['en'],
             gpu=False,
+            model_storage_directory=MODEL_DIR,
+            download_enabled=False,
             verbose=False
         )
 
-        print("EasyOCR loaded successfully.")
+        print("✅ EasyOCR loaded successfully.")
 
     return reader
 
 
+# ---------------------------------------------------------
+# UNLOAD OCR
+# ---------------------------------------------------------
+
 def unload_reader():
-    """
-    Release EasyOCR from memory.
-    """
 
     global reader
 
     if reader is not None:
 
         print("=" * 60)
-        print("Unloading EasyOCR to free RAM...")
+        print("Unloading EasyOCR...")
         print("=" * 60)
 
         try:
@@ -59,24 +74,24 @@ def unload_reader():
 
         gc.collect()
 
-        print("EasyOCR unloaded.")
+        print("✅ EasyOCR unloaded.")
 
 
-# ============================================================
-# OCR FUNCTION
-# ============================================================
+# ---------------------------------------------------------
+# READ ELECTRICITY METER
+# ---------------------------------------------------------
 
 def read_meter(image_path):
 
-    print("=" * 50)
+    print("=" * 60)
     print("Opening:", image_path)
-    print("=" * 50)
+    print("=" * 60)
 
     image = cv2.imread(image_path)
 
     if image is None:
 
-        print("ERROR: Image not found!")
+        print("❌ ERROR: Image not found!")
 
         return ""
 
@@ -84,11 +99,15 @@ def read_meter(image_path):
     print("Original Shape:", image.shape)
 
 
+    gray = None
+    processed = None
+
+
     try:
 
-        # ----------------------------------------------------
-        # Convert to grayscale
-        # ----------------------------------------------------
+        # -------------------------------------------------
+        # CONVERT TO GRAYSCALE
+        # -------------------------------------------------
 
         gray = cv2.cvtColor(
             image,
@@ -98,19 +117,21 @@ def read_meter(image_path):
         print("Gray Shape:", gray.shape)
 
 
-        # ----------------------------------------------------
-        # Resize extremely large images
-        # ----------------------------------------------------
+        # -------------------------------------------------
+        # RESIZE LARGE IMAGE
+        # -------------------------------------------------
 
         height, width = gray.shape
 
         max_width = 800
+
 
         if width > max_width:
 
             scale = max_width / width
 
             new_width = int(width * scale)
+
             new_height = int(height * scale)
 
             gray = cv2.resize(
@@ -125,9 +146,9 @@ def read_meter(image_path):
             )
 
 
-        # ----------------------------------------------------
-        # Reduce noise
-        # ----------------------------------------------------
+        # -------------------------------------------------
+        # REDUCE NOISE
+        # -------------------------------------------------
 
         gray = cv2.GaussianBlur(
             gray,
@@ -136,9 +157,9 @@ def read_meter(image_path):
         )
 
 
-        # ----------------------------------------------------
-        # Improve contrast
-        # ----------------------------------------------------
+        # -------------------------------------------------
+        # IMPROVE CONTRAST
+        # -------------------------------------------------
 
         processed = cv2.threshold(
             gray,
@@ -151,16 +172,16 @@ def read_meter(image_path):
         print("Starting OCR...")
 
 
-        # ----------------------------------------------------
-        # Load EasyOCR
-        # ----------------------------------------------------
+        # -------------------------------------------------
+        # LOAD LOCAL OCR MODEL
+        # -------------------------------------------------
 
         ocr_reader = load_reader()
 
 
-        # ----------------------------------------------------
-        # Run OCR
-        # ----------------------------------------------------
+        # -------------------------------------------------
+        # RUN OCR
+        # -------------------------------------------------
 
         results = ocr_reader.readtext(
             processed,
@@ -172,21 +193,22 @@ def read_meter(image_path):
 
 
         print("OCR Finished!")
+
         print("OCR Results:", results)
 
 
-        # ----------------------------------------------------
-        # Combine detected text
-        # ----------------------------------------------------
+        # -------------------------------------------------
+        # COMBINE TEXT
+        # -------------------------------------------------
 
         text = " ".join(results)
 
         print("Detected Text:", text)
 
 
-        # ----------------------------------------------------
-        # Find numbers
-        # ----------------------------------------------------
+        # -------------------------------------------------
+        # FIND NUMBERS
+        # -------------------------------------------------
 
         numbers = re.findall(
             r"\d+",
@@ -196,9 +218,9 @@ def read_meter(image_path):
         print("Numbers Found:", numbers)
 
 
-        # ----------------------------------------------------
-        # Select longest number
-        # ----------------------------------------------------
+        # -------------------------------------------------
+        # SELECT LONGEST NUMBER
+        # -------------------------------------------------
 
         if numbers:
 
@@ -215,7 +237,7 @@ def read_meter(image_path):
             return meter
 
 
-        print("No numbers detected.")
+        print("❌ No numbers detected.")
 
         return ""
 
@@ -223,8 +245,9 @@ def read_meter(image_path):
     except Exception as e:
 
         print("=" * 60)
-        print("OCR ERROR")
+        print("❌ OCR ERROR")
         print("=" * 60)
+
         print(e)
 
         return ""
@@ -232,13 +255,17 @@ def read_meter(image_path):
 
     finally:
 
-        # ----------------------------------------------------
-        # Release temporary image data
-        # ----------------------------------------------------
-
         try:
             del image
+        except Exception:
+            pass
+
+        try:
             del gray
+        except Exception:
+            pass
+
+        try:
             del processed
         except Exception:
             pass
@@ -246,9 +273,9 @@ def read_meter(image_path):
         gc.collect()
 
 
-# ============================================================
+# ---------------------------------------------------------
 # TEST
-# ============================================================
+# ---------------------------------------------------------
 
 if __name__ == "__main__":
 
