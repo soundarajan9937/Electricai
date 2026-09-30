@@ -2,51 +2,74 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Upload Meter | Electric AI</title>
 
     <link rel="stylesheet" href="css/upload.css">
+
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <div class="upload-box">
+        <div class="upload-box">
 
-        <img src="images/logo.png" class="logo">
+            <img
+                src="images/logo.png"
+                class="logo"
+                alt="Electric AI Logo"
+            >
 
-        <h1>Upload Electricity Meter</h1>
+            <h1>Upload Electricity Meter</h1>
 
-        <p>
-            Upload a clear photo of your electricity meter.
-            Our AI will detect the meter reading and calculate your electricity bill.
-        </p>
+            <p>
+                Upload a clear photo of your electricity meter.
+                Our AI will detect the meter reading and calculate
+                your electricity bill.
+            </p>
 
-        <div class="preview">
+            <div class="preview">
 
-            <img src="images/upload.png" id="previewImage">
+                <img
+                    src="images/upload.png"
+                    id="previewImage"
+                    alt="Meter Preview"
+                >
+
+            </div>
+
+            <input
+                type="file"
+                id="fileInput"
+                accept="image/*"
+            >
+
+            <button
+                type="button"
+                onclick="analyzeMeter()"
+            >
+                Analyze Meter
+            </button>
 
         </div>
 
-        <input
-            type="file"
-            id="fileInput"
-            accept="image/*">
-
-        <button onclick="analyzeMeter()">
-
-            Analyze Meter
-
-        </button>
-
     </div>
 
-</div>
 
-<script src="js/config.js"></script>
-<script src="js/upload.js"></script>
+    <!-- ================================================= -->
+    <!-- ELECTRIC AI JAVASCRIPT -->
+    <!-- IMPORTANT: config.js MUST COME FIRST -->
+    <!-- ================================================= -->
+
+    <script src="js/config.js"></script>
+
+    <script src="js/upload.js"></script>
 
 </body>
+
 </html>

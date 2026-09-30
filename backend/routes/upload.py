@@ -1,11 +1,14 @@
 from flask import Blueprint, request, jsonify
 import os
+from datetime import datetime
 from werkzeug.utils import secure_filename
 
 from ai.meter_classifier import is_meter_image
 from ai.meter_detection import detect_meter, unload_model
 from ai.ocr import read_meter, unload_reader
 from ai.bill_calculator import calculate_bill
+
+from database import fs, bills
 
 
 upload = Blueprint("upload", __name__)
@@ -15,7 +18,6 @@ upload = Blueprint("upload", __name__)
 # BASE DIRECTORY
 # ==========================================================
 
-# Always use the backend folder as the base directory
 BASE_DIR = os.path.dirname(
     os.path.dirname(
         os.path.abspath(__file__)
@@ -24,7 +26,7 @@ BASE_DIR = os.path.dirname(
 
 
 # ==========================================================
-# UPLOAD FOLDER
+# TEMPORARY UPLOAD FOLDER
 # ==========================================================
 
 UPLOAD_FOLDER = os.path.join(
@@ -48,6 +50,8 @@ def upload_image():
     print("=" * 60)
     print("REQUEST RECEIVED")
     print("=" * 60)
+
+    filepath = None
 
     try:
 
@@ -97,7 +101,7 @@ def upload_image():
 
 
         # --------------------------------------------------
-        # 3. SAVE IMAGE
+        # 3. SAVE TEMPORARILY
         # --------------------------------------------------
 
         filepath = os.path.join(
@@ -107,7 +111,7 @@ def upload_image():
 
         image.save(filepath)
 
-        print("IMAGE SAVED:")
+        print("TEMPORARY IMAGE SAVED:")
         print(filepath)
 
 
@@ -166,7 +170,6 @@ def upload_image():
             print("This is not a meter image")
             print("=" * 60)
 
-            # Release YOLO memory
             unload_model()
 
             return jsonify({
@@ -176,14 +179,12 @@ def upload_image():
 
 
         # --------------------------------------------------
-        # 7. YOLO DETECTION SUCCESS
+        # 7. YOLO SUCCESS
         # --------------------------------------------------
 
         print("YOLO detection completed.")
         print("Meter detected successfully.")
 
-
-        # Very important for memory usage
         unload_model()
 
 
@@ -242,12 +243,93 @@ def upload_image():
         )
 
 
-        # --------------------------------------------------
-        # 12. SUCCESS RESPONSE
-        # --------------------------------------------------
+        # ==================================================
+        # 12. STORE IMAGE IN MONGODB ATLAS GRIDFS
+        # ==================================================
+
+        print("=" * 60)
+        print("STORING IMAGE IN MONGODB ATLAS...")
+        print("=" * 60)
+
+        with open(filepath, "rb") as image_file:
+
+            image_data = image_file.read()
+
+        image_id = fs.put(
+            image_data,
+            filename=filename,
+            content_type=image.content_type or "image/jpeg",
+            metadata={
+                "type": "electricity_meter",
+                "meter_reading": reading,
+                "bill_amount": bill,
+                "created_at": datetime.utcnow()
+            }
+        )
+
+        print("IMAGE STORED IN MONGODB!")
+        print("MongoDB Image ID:", image_id)
+
+
+        # ==================================================
+        # 13. SAVE BILL INFORMATION
+        # ==================================================
+
+        bill_document = {
+
+            "meter_reading": reading,
+
+            "bill_amount": bill,
+
+            "image_id": image_id,
+
+            "image_filename": filename,
+
+            "created_at": datetime.utcnow()
+
+        }
+
+        bill_result = bills.insert_one(
+            bill_document
+        )
+
+        print(
+            "Bill saved to MongoDB:",
+            bill_result.inserted_id
+        )
+
+
+        # ==================================================
+        # 14. DELETE TEMPORARY LOCAL IMAGE
+        # ==================================================
+
+        try:
+
+            if filepath and os.path.exists(filepath):
+
+                os.remove(filepath)
+
+                print(
+                    "Temporary image deleted:"
+                )
+
+                print(filepath)
+
+        except Exception as delete_error:
+
+            print(
+                "Could not delete temporary image:",
+                delete_error
+            )
+
+
+        # ==================================================
+        # 15. SUCCESS RESPONSE
+        # ==================================================
 
         print("=" * 60)
         print("UPLOAD PROCESS COMPLETED")
+        print("IMAGE STORED IN MONGODB ATLAS")
         print("=" * 60)
 
         return jsonify({
@@ -256,7 +338,11 @@ def upload_image():
 
             "meter_reading": reading,
 
-            "bill_amount": bill
+            "bill_amount": bill,
+
+            "image_id": str(image_id),
+
+            "image_filename": filename
 
         }), 200
 
