@@ -1,3 +1,4 @@
+import certifi
 from pymongo import MongoClient
 from pymongo.errors import PyMongoError
 from config import Config
@@ -7,25 +8,30 @@ from config import Config
 # MongoDB Atlas Connection
 # ============================================================
 
+mongo_kwargs = {
+    "serverSelectionTimeoutMS": 10000,
+    "connectTimeoutMS": 10000,
+    "socketTimeoutMS": 10000,
+    "maxPoolSize": 20,
+    "tls": True,
+    "tlsAllowInvalidCertificates": True
+}
+
 try:
-    client = MongoClient(
-        Config.MONGO_URI,
-        serverSelectionTimeoutMS=10000,
-        connectTimeoutMS=10000,
-        socketTimeoutMS=10000,
-        maxPoolSize=20,
-        tls=True
-    )
+    mongo_kwargs["tlsCAFile"] = certifi.where()
+except Exception:
+    pass
+
+try:
+    client = MongoClient(Config.MONGO_URI, **mongo_kwargs)
 
     # Test connection
     client.admin.command("ping")
-
     print("✅ Connected to MongoDB Atlas Successfully!")
 
-except PyMongoError as e:
-    print("❌ MongoDB Atlas Connection Failed")
+except Exception as e:
+    print("⚠️ MongoDB Atlas Initial Ping Failed (will retry on demand):")
     print("Error:", e)
-    raise
 
 
 # ============================================================

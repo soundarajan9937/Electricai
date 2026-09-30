@@ -34,14 +34,10 @@ function analyzeMeter() {
  
         // Save uploaded image
         localStorage.setItem("meterImage", e.target.result); 
- 
-        // Backend URL
-        const BACKEND_URL =
-            "https://electric-ai-backend-sound.onrender.com";
- 
-        // Uploaded image URL
+
+        // Uploaded image URL using dynamic API_BASE_URL
         const imageURL =
-            BACKEND_URL + "/uploads/" + encodeURIComponent(file.name);
+            API_BASE_URL + "/uploads/" + encodeURIComponent(file.name);
  
         // Save backend image URL
         localStorage.setItem("meterImageURL", imageURL);

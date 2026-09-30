@@ -48,7 +48,8 @@ window.onload = async function () {
         console.log("HTTP Status:", response.status);
 
         if (!response.ok) {
-            throw new Error("Backend Error: " + response.status);
+            const errData = await response.json().catch(() => ({}));
+            throw new Error(errData.message || "Backend Error: " + response.status);
         }
 
         const data = await response.json();
