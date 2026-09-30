@@ -1,3 +1,7 @@
+// =====================================================
+// ELECTRIC AI - LOGIN
+// =====================================================
+
 document.querySelector("form").addEventListener("submit", async function (e) {
 
     e.preventDefault();
@@ -12,28 +16,39 @@ document.querySelector("form").addEventListener("submit", async function (e) {
 
     try {
 
-        const response = await fetch(`${API_BASE_URL}/login`, {
+        console.log("=================================");
+        console.log("⚡ ELECTRIC AI LOGIN");
+        console.log("=================================");
 
-            method: "POST",
+        console.log("Backend:", API_BASE_URL);
+        console.log("Login URL:", API_BASE_URL + "/login");
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+        const response = await fetch(
+            API_BASE_URL + "/login",
+            {
+                method: "POST",
 
-            body: JSON.stringify({
-                email: email,
-                password: password
-            })
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-        });
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            }
+        );
+
+        console.log("Response status:", response.status);
 
         const data = await response.json();
+
+        console.log("Backend response:", data);
 
         if (response.ok) {
 
             alert("✅ " + data.message);
 
-            // Save user profile details to localStorage for the dashboard
             const profile = {
                 name: data.name,
                 email: data.email,
@@ -42,40 +57,78 @@ document.querySelector("form").addEventListener("submit", async function (e) {
                 address: data.address,
                 password: data.password
             };
-            localStorage.setItem("profile", JSON.stringify(profile));
+
+            localStorage.setItem(
+                "profile",
+                JSON.stringify(profile)
+            );
+
+            localStorage.setItem(
+                "userEmail",
+                data.email || email
+            );
+
+            localStorage.setItem(
+                "userMeter",
+                data.meter || ""
+            );
+
+            localStorage.setItem(
+                "userName",
+                data.name || ""
+            );
+
+            console.log("✅ Login successful.");
 
             window.location.href = "dashboard.html";
 
         } else {
 
-            alert("❌ " + data.message);
-
+            alert(
+                "❌ " +
+                (data.message || "Login failed.")
+            );
         }
 
     } catch (error) {
 
+        console.error("❌ LOGIN CONNECTION ERROR");
         console.error(error);
 
-        alert("Cannot connect to Flask Server.");
-
+        alert(
+            "Cannot connect to Flask Server."
+        );
     }
 
 });
 
-// ===============================
-// Toggle Password Visibility Eye Symbol
-// ===============================
+
+// =====================================================
+// PASSWORD VISIBILITY
+// =====================================================
+
 function togglePasswordVisibility() {
-    const passwordField = document.getElementById("password");
-    const toggleIcon = document.getElementById("togglePasswordIcon");
+
+    const passwordField =
+        document.getElementById("password");
+
+    const toggleIcon =
+        document.getElementById("togglePasswordIcon");
 
     if (passwordField.type === "password") {
+
         passwordField.type = "text";
+
         toggleIcon.classList.remove("fa-eye");
+
         toggleIcon.classList.add("fa-eye-slash");
+
     } else {
+
         passwordField.type = "password";
+
         toggleIcon.classList.remove("fa-eye-slash");
+
         toggleIcon.classList.add("fa-eye");
     }
 }
