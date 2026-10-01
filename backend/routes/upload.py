@@ -133,35 +133,44 @@ def upload_meter():
         finally:
             unload_model()
 
-        if not found or not crop_path or not os.path.exists(crop_path):
-            print("❌ NON-METER IMAGE: Detection failed")
-            return jsonify({
-                "success": False,
-                "message": "This image does not appear to be a supported electricity meter. Please upload a clear meter image."
-            }), 400
-
-        print("METER DETECTED SUCCESSFULLY: Crop at", crop_path)
-
         # 6. OCR START
         print("OCR START")
         reading = None
 
-        try:
-            reading = read_meter(crop_path)
-        except Exception as e:
-            print("❌ OCR Exception:", str(e))
-            reading = None
-        finally:
-            unload_reader()
+        if found and crop_path and os.path.exists(crop_path):
+            try:
+                reading = read_meter(crop_path)
+            except Exception as e:
+                print("❌ Crop OCR Exception:", str(e))
+                reading = None
+
+        # Fallback: If crop OCR failed, run OCR on original image
+        if reading is None:
+            print("⚠️ Crop OCR returned None, attempting fallback OCR on full image...")
+            try:
+                reading = read_meter(image_path)
+            except Exception as e:
+                print("❌ Fallback OCR Exception:", str(e))
+                reading = None
+
+        unload_reader()
 
         print("FINAL OCR READING:", reading)
 
+        # If both detection and OCR failed to find a reading
         if reading is None:
-            print("❌ OCR FAILED: Unable to read meter display")
-            return jsonify({
-                "success": False,
-                "message": "Unable to read the meter display. Please upload a clearer meter image."
-            }), 400
+            if not found:
+                print("❌ NON-METER IMAGE: Rejection")
+                return jsonify({
+                    "success": False,
+                    "message": "This image does not appear to be a supported electricity meter. Please upload a clear meter image."
+                }), 400
+            else:
+                print("❌ UNREADABLE METER DISPLAY: Rejection")
+                return jsonify({
+                    "success": False,
+                    "message": "Unable to read the meter display. Please upload a clearer meter image."
+                }), 400
 
         reading_string = str(reading).strip()
 
