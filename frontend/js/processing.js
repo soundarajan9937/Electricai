@@ -4,10 +4,14 @@ const status = document.getElementById("status");
 
 let processingStarted = false;
 
+
+// ============================================================
+// PROCESS METER IMAGE
+// ============================================================
+
 window.onload = async function () {
 
     if (processingStarted) {
-        console.log("Already processing...");
         return;
     }
 
@@ -17,35 +21,91 @@ window.onload = async function () {
     console.log("⚡ ELECTRIC AI - PROCESSING");
     console.log("======================================");
 
+
     try {
 
-        document.getElementById("step1").innerHTML =
-            "⏳ Preparing uploaded image...";
+        // ====================================================
+        // CLEAR OLD RESULT
+        // ====================================================
 
-        const imageData = localStorage.getItem("meterImage");
+        localStorage.removeItem("meter_reading");
+        localStorage.removeItem("bill_amount");
+        localStorage.removeItem("meterImageURL");
+
+
+        // ====================================================
+        // GET NEW IMAGE
+        // ====================================================
+
+        const imageData =
+            localStorage.getItem("meterImage");
 
         if (!imageData) {
-            console.error("No meterImage found in localStorage.");
 
             alert("No uploaded image found.");
 
-            window.location.href = "upload_meter.html";
+            window.location.href =
+                "upload_meter.html";
+
             return;
         }
 
-        console.log("Image found in localStorage.");
 
-        status.innerHTML = "Preparing image...";
+        console.log(
+            "✅ New uploaded image found."
+        );
 
-        // Convert Base64 image to Blob
-        const imageResponse = await fetch(imageData);
-        const blob = await imageResponse.blob();
 
-        console.log("Image converted to Blob.");
-        console.log("Image size:", blob.size);
+        // ====================================================
+        // STEP 1
+        // ====================================================
 
-        // Create FormData
-        const formData = new FormData();
+        const step1 =
+            document.getElementById("step1");
+
+        if (step1) {
+
+            step1.innerHTML =
+                "⏳ Preparing uploaded image...";
+        }
+
+        status.innerHTML =
+            "Preparing image...";
+
+
+        // ====================================================
+        // BASE64 → BLOB
+        // ====================================================
+
+        const imageResponse =
+            await fetch(imageData);
+
+        if (!imageResponse.ok) {
+
+            throw new Error(
+                "Unable to read uploaded image."
+            );
+        }
+
+
+        const blob =
+            await imageResponse.blob();
+
+
+        console.log(
+            "Image size:",
+            blob.size,
+            "bytes"
+        );
+
+
+        // ====================================================
+        // FORM DATA
+        // ====================================================
+
+        const formData =
+            new FormData();
+
 
         formData.append(
             "image",
@@ -53,67 +113,102 @@ window.onload = async function () {
             "meter.jpg"
         );
 
-        document.getElementById("step1").innerHTML =
-            "✅ Upload Received";
 
-        // -----------------------------------------
-        // STEP 2 - SEND TO BACKEND
-        // -----------------------------------------
+        // ====================================================
+        // STEP 2
+        // ====================================================
 
         status.innerHTML =
             "Detecting Electricity Meter...";
 
-        document.getElementById("step2").innerHTML =
-            "⏳ Detecting Meter...";
+
+        const step2 =
+            document.getElementById("step2");
+
+        if (step2) {
+
+            step2.innerHTML =
+                "⏳ Detecting Meter...";
+        }
+
+
+        // ====================================================
+        // BACKEND URL
+        // ====================================================
+
+        const uploadURL =
+            API_BASE_URL + "/upload";
+
 
         console.log(
-            "Sending request to:",
-            API_BASE_URL + "/upload"
+            "Sending image to:",
+            uploadURL
         );
 
-        const response = await fetch(
-            API_BASE_URL + "/upload",
-            {
-                method: "POST",
-                body: formData
-            }
-        );
+
+        // ====================================================
+        // SEND IMAGE
+        // ====================================================
+
+        const response =
+            await fetch(
+                uploadURL,
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
 
         console.log(
-            "Backend HTTP Status:",
+            "Backend HTTP status:",
             response.status
         );
 
-        // -----------------------------------------
+
+        // ====================================================
         // READ BACKEND RESPONSE
-        // -----------------------------------------
+        // ====================================================
 
-        const responseText = await response.text();
+        const responseText =
+            await response.text();
 
-        console.log("Raw Backend Response:");
-        console.log(responseText);
+
+        console.log(
+            "Backend response:",
+            responseText
+        );
+
 
         let data;
 
         try {
-            data = JSON.parse(responseText);
+
+            data =
+                JSON.parse(
+                    responseText
+                );
+
         } catch (error) {
 
             throw new Error(
-                "Backend returned an invalid response."
+                "Backend returned invalid JSON."
             );
         }
 
-        console.log("Parsed Backend Response:");
-        console.log(data);
+
+        // ====================================================
+        // BACKEND ERROR
+        // ====================================================
 
         if (!response.ok) {
 
             throw new Error(
                 data.message ||
-                "Backend Error: HTTP " + response.status
+                "Meter analysis failed."
             );
         }
+
 
         if (!data.success) {
 
@@ -123,109 +218,237 @@ window.onload = async function () {
             );
         }
 
-        // -----------------------------------------
-        // STEP 3 - GET RESULTS
-        // -----------------------------------------
+
+        // ====================================================
+        // VERIFY ACTUAL READING
+        // ====================================================
+
+        if (
+            data.meter_reading === undefined ||
+            data.meter_reading === null ||
+            String(data.meter_reading).trim() === ""
+        ) {
+
+            throw new Error(
+                "Backend did not return a meter reading."
+            );
+        }
+
+
+        if (
+            data.bill_amount === undefined ||
+            data.bill_amount === null
+        ) {
+
+            throw new Error(
+                "Backend did not return a bill amount."
+            );
+        }
+
+
+        // ====================================================
+        // GET ACTUAL VALUES
+        // ====================================================
+
+        const actualReading =
+            String(
+                data.meter_reading
+            ).trim();
+
+
+        const actualBill =
+            String(
+                data.bill_amount
+            ).trim();
+
+
+        console.log(
+            "======================================"
+        );
+
+        console.log(
+            "✅ ACTUAL BACKEND RESULT"
+        );
 
         console.log(
             "Meter Reading:",
-            data.meter_reading
+            actualReading
         );
 
         console.log(
             "Bill Amount:",
-            data.bill_amount
+            actualBill
         );
 
-        // Save result
+        console.log(
+            "======================================"
+        );
+
+
+        // ====================================================
+        // SAVE ONLY NEW BACKEND RESULT
+        // ====================================================
+
         localStorage.setItem(
             "meter_reading",
-            data.meter_reading ?? ""
+            actualReading
         );
+
 
         localStorage.setItem(
             "bill_amount",
-            data.bill_amount ?? ""
+            actualBill
         );
 
-        // Save backend image if returned
-        if (data.image) {
 
-            let imageURL;
+        // ====================================================
+        // SAVE IMAGE
+        // ====================================================
 
-            if (
-                data.image.startsWith("http://") ||
-                data.image.startsWith("https://")
-            ) {
+        localStorage.setItem(
+            "meterImageURL",
+            data.image_id
+                ? API_BASE_URL +
+                  "/image/" +
+                  encodeURIComponent(
+                      data.image_id
+                  )
+                : ""
+        );
 
-                imageURL = data.image;
 
-            } else {
+        // ====================================================
+        // STEP 2 COMPLETE
+        // ====================================================
 
-                imageURL =
-                    API_BASE_URL +
-                    "/uploads/" +
-                    encodeURIComponent(data.image);
-            }
+        if (step2) {
 
-            localStorage.setItem(
-                "meterImageURL",
-                imageURL
-            );
-
-            console.log(
-                "Backend Image URL:",
-                imageURL
-            );
+            step2.innerHTML =
+                "✅ Meter Detected";
         }
 
-        // -----------------------------------------
-        // STEP 4 - UPDATE PROCESSING SCREEN
-        // -----------------------------------------
 
-        document.getElementById("step2").innerHTML =
-            "✅ Meter Detected";
-
-        await new Promise(
-            resolve => setTimeout(resolve, 700)
-        );
+        // ====================================================
+        // STEP 3
+        // ====================================================
 
         status.innerHTML =
             "Reading Meter...";
 
-        document.getElementById("step3").innerHTML =
-            "✅ OCR Completed";
+
+        const step3 =
+            document.getElementById("step3");
+
+
+        if (step3) {
+
+            step3.innerHTML =
+                "⏳ Reading Meter...";
+        }
+
 
         await new Promise(
-            resolve => setTimeout(resolve, 700)
+            resolve =>
+                setTimeout(
+                    resolve,
+                    500
+                )
         );
+
+
+        if (step3) {
+
+            step3.innerHTML =
+                "✅ OCR Completed";
+        }
+
+
+        // ====================================================
+        // STEP 4
+        // ====================================================
 
         status.innerHTML =
             "Calculating Bill...";
 
-        document.getElementById("step4").innerHTML =
-            "✅ Bill Calculated";
+
+        const step4 =
+            document.getElementById("step4");
+
+
+        if (step4) {
+
+            step4.innerHTML =
+                "⏳ Calculating Bill...";
+        }
+
 
         await new Promise(
-            resolve => setTimeout(resolve, 700)
+            resolve =>
+                setTimeout(
+                    resolve,
+                    500
+                )
         );
+
+
+        if (step4) {
+
+            step4.innerHTML =
+                "✅ Bill Calculated";
+        }
+
+
+        // ====================================================
+        // STEP 5
+        // ====================================================
 
         status.innerHTML =
             "Generating Report...";
 
-        document.getElementById("step5").innerHTML =
-            "✅ Report Generated";
+
+        const step5 =
+            document.getElementById("step5");
+
+
+        if (step5) {
+
+            step5.innerHTML =
+                "⏳ Generating Report...";
+        }
+
 
         await new Promise(
-            resolve => setTimeout(resolve, 700)
+            resolve =>
+                setTimeout(
+                    resolve,
+                    500
+                )
         );
+
+
+        if (step5) {
+
+            step5.innerHTML =
+                "✅ Report Generated";
+        }
+
+
+        // ====================================================
+        // REDIRECT
+        // ====================================================
 
         status.innerHTML =
             "Opening Result Page...";
 
-        console.log(
-            "Redirecting to result.html..."
+
+        await new Promise(
+            resolve =>
+                setTimeout(
+                    resolve,
+                    500
+                )
         );
+
 
         window.location.replace(
             "result.html"
@@ -233,7 +456,7 @@ window.onload = async function () {
 
     }
 
-    catch (err) {
+    catch (error) {
 
         console.error(
             "======================================"
@@ -244,18 +467,23 @@ window.onload = async function () {
         );
 
         console.error(
+            error
+        );
+
+        console.error(
             "======================================"
         );
 
-        console.error(err);
 
         status.innerHTML =
             "❌ Processing Failed";
 
+
         alert(
-            err.message ||
-            "Something went wrong while processing the image."
+            error.message ||
+            "Something went wrong."
         );
+
 
         processingStarted = false;
     }

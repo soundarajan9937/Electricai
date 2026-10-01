@@ -22,6 +22,9 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# User uploaded files (keep uploads folder tracked)
+# User uploaded files & debug crops
 backend/uploads/*
 !backend/uploads/.gitkeep
+backend/ai/ocr_debug/
+backend/ai/easyocr_models/
+backend/dataset/

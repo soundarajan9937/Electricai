@@ -67,8 +67,8 @@ class Config:
     # Upload Folder
     UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
 
-    # Maximum Upload Size (10 MB)
-    MAX_CONTENT_LENGTH = 10 * 1024 * 1024
+    # Maximum Upload Size (8 MB)
+    MAX_CONTENT_LENGTH = 8 * 1024 * 1024
 
     # Allowed Image Extensions
     ALLOWED_EXTENSIONS = {

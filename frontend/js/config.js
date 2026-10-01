@@ -7,8 +7,7 @@ const API_BASE_URL = (
     window.location.hostname === "localhost"
 )
     ? "http://127.0.0.1:5000"
-    : "https://electric-ai-backend-sound.onrender.com";
-
+    : (window.location.origin && window.location.origin.includes("onrender.com") ? window.location.origin : "https://electric-ai-backend-sound.onrender.com");
 
 console.log("=================================");
 console.log("⚡ ELECTRIC AI API CONFIG");
